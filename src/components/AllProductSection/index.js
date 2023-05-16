@@ -45,6 +45,30 @@ const categoryOptions = [
     categoryId: '5',
   },
 ]
+
+const ratingsList = [
+  {
+    ratingId: '4',
+    imageUrl:
+      'https://assets.ccbp.in/frontend/react-js/rating-four-stars-img.png',
+  },
+  {
+    ratingId: '3',
+    imageUrl:
+      'https://assets.ccbp.in/frontend/react-js/rating-three-stars-img.png',
+  },
+  {
+    ratingId: '2',
+    imageUrl:
+      'https://assets.ccbp.in/frontend/react-js/rating-two-stars-img.png',
+  },
+  {
+    ratingId: '1',
+    imageUrl:
+      'https://assets.ccbp.in/frontend/react-js/rating-one-star-img.png',
+  },
+]
+
 class AllProductSection extends Component {
   state = {
     productList: [],
@@ -52,6 +76,7 @@ class AllProductSection extends Component {
     activeOptionId: sortbyOptions[0].optionId,
     activeCategoryid: '',
     searchInput: '',
+    activeRatingId: '',
   }
 
   componentDidMount() {
@@ -63,9 +88,14 @@ class AllProductSection extends Component {
       apiStatus: apiConstants.isLoading,
     })
     const jwtToken = Cookies.get('jwt_token')
-    const {activeOptionId, activeCategoryid, searchInput} = this.state
+    const {
+      activeOptionId,
+      activeCategoryid,
+      searchInput,
+      activeRatingId,
+    } = this.state
 
-    const url = `https://apis.ccbp.in/products/?sort_by=${activeOptionId}&category=${activeCategoryid}&title_search=${searchInput}`
+    const url = `https://apis.ccbp.in/products/?sort_by=${activeOptionId}&category=${activeCategoryid}&title_search=${searchInput}&rating=${activeRatingId}`
 
     console.log(url)
     const options = {
@@ -166,8 +196,13 @@ class AllProductSection extends Component {
     this.getProducts()
   }
 
+  changeRating = activeRatingId => {
+    this.setState({activeRatingId}, this.getProducts)
+  }
+
   render() {
-    const {activeCategoryid, searchInput} = this.state
+    const {activeCategoryid, searchInput, activeRatingId} = this.state
+    console.log(activeCategoryid)
     console.log(activeCategoryid)
     console.log(searchInput)
     return (
@@ -179,6 +214,9 @@ class AllProductSection extends Component {
           searchInput={searchInput}
           changeSearchInput={this.changeSearchInput}
           enterSearchInput={this.enterSearchInput}
+          ratingsList={ratingsList}
+          activeRatingId={activeRatingId}
+          changeRating={this.changeRating}
         />
         {this.renderAllProducts()}
       </div>
